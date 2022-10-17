@@ -1,0 +1,24 @@
+"<html> <span style =""font-size:12 ; font-family:Dialog"">DRP Register Name</span>","<html> <span style =""font-size:12 ; font-family:Dialog"">Register Address</span>","<html> <span style =""font-size:12 ; font-family:Dialog"">Register Values</span>"
+"Power Reg",0x300,FFFF
+"CLKOUT0 Reg1",0x304,1145
+"CLKOUT0 Reg2",0x308,1c00
+"CLKOUT1 Reg1",0x30C,1041
+"CLKOUT1 Reg2",0x310,00c0
+"CLKOUT2 Reg1",0x314,1041
+"CLKOUT2 Reg2",0x318,00c0
+"CLKOUT3 Reg1",0x31C,1041
+"CLKOUT3 Reg2",0x320,00c0
+"CLKOUT4 Reg1",0x324,1041
+"CLKOUT4 Reg2",0x328,00c0
+"CLKOUT5 Reg1",0x32C,1041
+"CLKOUT5 Reg2",0x330,00c0
+"CLKOUT6 Reg1",0x334,1041
+"CLKOUT6 Reg2",0x338,0cc0
+"DIV_CLK Reg",0x33C,00c4
+"CLKFBOUT Reg1",0x340,1618
+"CLKFBOUT Reg2",0x344,3c00
+"LOCK Reg1",0x348,00fa
+"LOCK Reg2",0x34C,7c01
+"LOCK Reg3",0x350,7fe9
+"Filter Reg1",0x354,0800
+"Filter Reg2 ",0x358,9090
