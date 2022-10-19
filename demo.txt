@@ -1,0 +1,2 @@
+Already logging to demo.txt.
+Undefined command: "logging".  Try "help".

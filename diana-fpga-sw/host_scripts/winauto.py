@@ -1,3 +1,5 @@
+from os import mkdir
+from os.path import exists
 import utils.power as power
 from    utils.utils import cd, check_return_zero, current_utctime_string, cmd, non_blocking_cmd
 import subprocess
@@ -7,9 +9,11 @@ import  utils.procedures as procedures
 from    utils.parser import HostScriptParserClass
 import atexit
 import time 
+from pathlib import Path
+
 
 #set the variables here
-csbias_steps = [0.6]
+csbias_steps = [0.6, 0.5]
 activations = [1]
 weight_polarity = [1]
 
@@ -132,13 +136,14 @@ for cs_b in csbias_steps:
             print("Starting the chip program...")
             procedures.spawn_openocd_p()
             
-            print ("run gdb")
+            #a = input ("run gdb")
             time.sleep(2)
             
             
             #non_blocking_cmd ("riscv64-unknown-elf-gdb.exe Z:/home/imandadras/diana-riscv-src/ana_boot_ex/build/hwme.c/pulpissimo/hwme/hwme -x C:/zedboard/diana-fpga-sw/host_scripts/templates/gdb-run-soc.sh")
-            
-            non_blocking_cmd ("riscv64-unknown-elf-gdb.exe C:/zedboard/diana-riscv-src/ana_boot_ex/build/hwme.c/pulpissimo/hwme/hwme -x C:/zedboard/diana-fpga-sw/host_scripts/templates/gdb-run-soc.sh")
+            Path("\\results\{}-{}-{}".format(cs_b,activation,weight_p)).mkdir(parents=True, exist_ok=True)
+            with cd ("\\results\{}-{}-{}".format(cs_b,activation,weight_p)):
+                non_blocking_cmd ("riscv64-unknown-elf-gdb.exe C:/zedboard/diana-riscv-src/ana_boot_ex/build/hwme.c/pulpissimo/hwme/hwme -x C:/zedboard/diana-fpga-sw/host_scripts/templates/gdb-run-soc1.sh")
 
             time.sleep (2)
 
@@ -158,16 +163,13 @@ for cs_b in csbias_steps:
             print("Release FPGA core. Sending acknoledge signal...")
             cmd("wsl ssh zedb-diana 'rm -f ~/diana-fpga-sw/TURNVDDEON'" , shell=True)
 
-                    
-            while cmd("wsl ssh zedb-diana 'test -f ~/diana-fpga-sw/CHAR_DONE'", shell=True):
-                print ("flag is not there")
-                time.sleep(1)
+            with cd ("\\results\{}-{}-{}".format(cs_b,activation,weight_p)):
+                while not exists("Done.txt"):
+                    print ("waiting for the chip program to be completed")        
+                    time.sleep(1)
             print ("flag is there")
 
-            print("Release FPGA core. Sending acknoledge signal...")
-            cmd ("wsl ssh zedb-diana 'rm -f ~/diana-fpga-sw/CHAR_DONE'", shell= True)
-
             print ("running offprocedure")
-            procedures.off_procedure(session= session) 
+            procedures.off_procedure(session= [session]) 
 
 

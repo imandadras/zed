@@ -119,9 +119,7 @@ def off_procedure(session,  ctrlc=False, **kwargs):
     print ("process is killed")
     cmd("ssh zedb-diana 'rm -rf ~/diana-fpga-sw/CHAR_DONE'")
     cmd("ssh zedb-diana 'rm -rf ~/diana-fpga-sw/TURNVDDEON'")
-    print (session)
     if session:
-        print ("im here")
         session[0].force_terminate()
     cmd ("openocd -c shutdown")
     #SIGINT to all the
@@ -129,7 +127,7 @@ def off_procedure(session,  ctrlc=False, **kwargs):
     #cmd ("taskkill /IM powershell.exe /f")
     cmd ("taskkill /IM riscv64-unknown-elf-gdb.exe /f")
     cmd ("taskkill /IM openocd.exe /f")    
-    cmd ("taskkill /IM python.exe /f")
+
 
     #cmd("stty sane") #cleaning the mess from shell=True stdout
     if ctrlc:

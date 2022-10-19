@@ -7,7 +7,7 @@ from utils.parser import FPGAScriptParserClass
 import time
 import os
 
-base_clk = 10 #MHz
+base_clk = 5 #MHz
 
 parser = FPGAScriptParserClass()
 
