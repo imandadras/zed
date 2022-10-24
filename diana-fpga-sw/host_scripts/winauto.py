@@ -84,7 +84,7 @@ print ("The script will produce {} iterations".format(len(csbias_steps)*len(acti
 for cs_b in csbias_steps:
     for activation in activations:
         for weight_p in weight_polarity:
-            session = power.power (ana_csbias=cs_b)
+            session = power.power (ana_csbias=cs_b,measurementFolder="C:/results/{}-{}-{}/power".format(cs_b,activation,weight_p))
             sess.append(session)
             session.power_set()
             print("Generating header data files for the experiment...")
@@ -125,7 +125,7 @@ for cs_b in csbias_steps:
 
             print("Starting the FPGA program...")
             dump_path = "/root/results/{}_{}_{}/".format(cs_b,activation,weight_p)
-            p = cmd ("ssh zedb-diana mkdir {}".format(dump_path))
+            #p = cmd ("ssh zedb-diana mkdir {}".format(dump_path))
             
 
 
@@ -158,6 +158,7 @@ for cs_b in csbias_steps:
             session.channel_active(settings.chdic['vh'])
             session.channel_active(settings.chdic['vdde'])
             session.channel_active(settings.chdic['csbias'])
+            session.initiate()
             time.sleep(1)
         
             print("Release FPGA core. Sending acknoledge signal...")
@@ -168,8 +169,11 @@ for cs_b in csbias_steps:
                     print ("waiting for the chip program to be completed")        
                     time.sleep(1)
             print ("flag is there")
-
+            cmd ("wsl ssh zedb-diana ' touch /root/diana-fpga-sw/SHUT'")
+            time.sleep(2)
+            session.terminate()
             print ("running offprocedure")
-            procedures.off_procedure(session= [session]) 
+            procedures.off_procedure(session=[]) 
+atexit.unregister(procedures.off_procedure)
 
 

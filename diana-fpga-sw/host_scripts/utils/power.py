@@ -8,7 +8,7 @@ from bidict import bidict
 from utils.settings import chdic
 
 class power:
-    def __init__(self, board_plus=5, board_minus=-5, vddio=1.8, vdd=0.8, vdd_mem=0.8, vdde=0.8, ana_vh=0.8, ana_csbias=0.6):
+    def __init__(self, board_plus=5, board_minus=-5, vddio=1.8, vdd=0.8, vdd_mem=0.8, vdde=0.8, ana_vh=0.8, ana_csbias=0.6, measurementFolder="./log/"):
         self.session = nidcpower.Session(['SMU1/0:3', 'SMU2/0:3'], reset=True)
         self.channel_indices = '0-{0}'.format(self.session.channel_count - 1)
         self.channels = self.session.get_channel_names(self.channel_indices)
@@ -20,7 +20,8 @@ class power:
         self.vdde = vdde
         self.ana_vh = ana_vh
         self.ana_csbias = ana_csbias
-        self.logfile = "./log/info.txt"
+        self.logfile = "{}/info.txt".format(measurementFolder)
+        self.measurementFolder = measurementFolder
         os.makedirs(os.path.dirname(self.logfile), exist_ok=True)
         self.session.compliance_limit_symmetry = nidcpower.ComplianceLimitSymmetry.ASYMMETRIC
         self.session.output_function = nidcpower.OutputFunction.DC_VOLTAGE
@@ -96,7 +97,7 @@ class power:
         dic = bidict(chdic)
         for channel in (self.channels):
             measurement = self.session.channels[channel].fetch_multiple(self.session.channels[channel].fetch_backlog)
-            with open('./log/{}.csv'.format(dic.inverse[channel]),'w+',newline='') as f :
+            with open('{}/{}.csv'.format(self.measurementFolder, dic.inverse[channel]),'w+',newline='') as f :
                 writer = csv.writer (f)
                 writer.writerows(measurement)
         self.session.abort()
