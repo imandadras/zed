@@ -14,9 +14,9 @@ from pathlib import Path
 
 #set the variables here
 csbias_steps = [0.6]
-activations = [100]
-weight_polarity = [1]
-N_tests = 13
+activations = [5] #-63,63
+weight_polarity = [1] #-1, 1
+N_tests = 10
 
 sess = []
 atexit.register(procedures.off_procedure, session=sess)
@@ -80,7 +80,7 @@ print (csbias_steps, activations, weight_polarity)
 """
 
 print ("The script will produce {} iterations".format(len(csbias_steps)*len(activations)*len(weight_polarity)))
-for test_N in range(9, N_tests):
+for test_N in range(0, N_tests):
     for cs_b in csbias_steps:
         for activation in activations:
             for weight_p in weight_polarity:
@@ -108,12 +108,14 @@ for test_N in range(9, N_tests):
                                 --weight_start_row {row}\
                                 --weight_batch_row {range}\
                                 --weight_start_col 0\
-                                --weight_batch_col 512""".format( weight_form = weight_form,   
+                                --weight_batch_col 512\
+                                --unit_time {unit_time}""".format( weight_form = weight_form,   
                                  activation_size=4*4*128,
                                  activation_value=activation,
                                  weight_polarity=weight_p,
-                                 row=int(1152-(100*test_N)),
-                                 range=int(100*test_N)
+                                 row=0, #int(1152-(100*test_N)),
+                                 range=128,
+                                 unit_time=test_N
                                  ))
                         time.sleep (10)
                         #if not header.wait == 0:
