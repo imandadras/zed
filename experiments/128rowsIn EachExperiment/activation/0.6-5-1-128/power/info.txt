@@ -1,0 +1,7 @@
+Voltages are set at 2022-10-31 14:27:22.017257
+Channel plus is activated at 2022-10-31 14:27:38.030158
+Channel minus is activated at 2022-10-31 14:27:38.036307
+Channel vddio is activated at 2022-10-31 14:27:38.041410
+Channel vdd is activated at 2022-10-31 14:27:38.046425
+Channel vddmem is activated at 2022-10-31 14:27:38.051455
+The measurement is forcefully closed at 2022-10-31 14:27:52.235173 without measurement

@@ -1,5 +1,6 @@
 from os import mkdir
 from os.path import exists
+from tkinter import N
 import utils.power as power
 from    utils.utils import cd, check_return_zero, current_utctime_string, cmd, non_blocking_cmd
 import subprocess
@@ -13,10 +14,10 @@ from pathlib import Path
 
 
 #set the variables here
-csbias_steps = [0.6]
-activations = [5] #-63,63
+csbias_steps = [0.61]
+activations = list(range(29,64,1)) #-63,63
 weight_polarity = [1] #-1, 1
-N_tests = 10
+N_tests = 1
 
 sess = []
 atexit.register(procedures.off_procedure, session=sess)
@@ -85,7 +86,7 @@ for test_N in range(0, N_tests):
         for activation in activations:
             for weight_p in weight_polarity:
                 for row in range(1):
-                    results_path = "C:/results/{}/{}-{}-{}/".format(weight_form, cs_b,activation,weight_p) 
+                    results_path = "C:/results/{}/forthAllActivations/{}-{}-{}/".format(weight_form, cs_b,activation,weight_p) 
                     session = power.power (ana_csbias=cs_b,measurementFolder=results_path+'/power')
                     sess.append(session)
                     session.power_set()
@@ -96,7 +97,7 @@ for test_N in range(0, N_tests):
                         header = cmd("""python MS_gen_data1.py  -p ana_boot_ex\
                                 -imp utc_ima.yaml\
                                 -ima\
-                                -a UNI\
+                                -a ROW\
                                 -as {activation_size}\
                                 -v {activation_value}\
                                 -w {weight_form}\
@@ -109,13 +110,17 @@ for test_N in range(0, N_tests):
                                 --weight_batch_row {range}\
                                 --weight_start_col 0\
                                 --weight_batch_col 512\
-                                --unit_time {unit_time}""".format( weight_form = weight_form,   
+                                --actv_start_row {a_row}\
+                                --actv_range_row {a_range}\
+                                --actv_batch_num 1\
+                                --actv_batch_size 2048""".format( weight_form = weight_form,   
                                  activation_size=4*4*128,
                                  activation_value=activation,
                                  weight_polarity=weight_p,
-                                 row=0, #int(1152-(100*test_N)),
-                                 range=128,
-                                 unit_time=test_N
+                                 row=60, #1152-(128*test_N), #int(1152-(100*test_N)),
+                                 range=20,
+                                 a_row=60, #1152-(128*test_N),
+                                 a_range=20
                                  ))
                         time.sleep (10)
                         #if not header.wait == 0:
