@@ -3,7 +3,7 @@ import csv
 import matplotlib.pyplot as plt
 
 
-unit_time = 9
+unit_time = 1
 experiments = []
 paths = next(os.walk('.'))[1]
 for path in paths:
@@ -13,7 +13,11 @@ for path in paths:
 
         experiments.append(res[unit_time])
 x = list(range(-63,64,1))
-for experiment in experiments:
-    plt.plot(x, experiment)
+for i, experiment in enumerate(experiments):
+    plt.plot(x, experiment, label=paths[i])
+plt.title("Unit Time {}".format(unit_time))
+plt.xlabel("Input")
+plt.ylabel("Output")
+plt.legend()
 plt.show()
     

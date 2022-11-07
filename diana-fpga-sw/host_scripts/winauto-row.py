@@ -14,8 +14,8 @@ from pathlib import Path
 
 
 #set the variables here
-csbias_steps = [0.61]
-activations = list(range(29,64,1)) #-63,63
+csbias_steps = [0.74, 0.73, 0.72, 0.71]
+activations = list(range(-28,64,1)) #-63,63
 weight_polarity = [1] #-1, 1
 N_tests = 1
 
@@ -86,7 +86,7 @@ for test_N in range(0, N_tests):
         for activation in activations:
             for weight_p in weight_polarity:
                 for row in range(1):
-                    results_path = "C:/results/{}/forthAllActivations/{}-{}-{}/".format(weight_form, cs_b,activation,weight_p) 
+                    results_path = "C:/results/{}/model/{}/{}-{}/".format(weight_form, cs_b,activation,weight_p) 
                     session = power.power (ana_csbias=cs_b,measurementFolder=results_path+'/power')
                     sess.append(session)
                     session.power_set()
@@ -117,10 +117,10 @@ for test_N in range(0, N_tests):
                                  activation_size=4*4*128,
                                  activation_value=activation,
                                  weight_polarity=weight_p,
-                                 row=60, #1152-(128*test_N), #int(1152-(100*test_N)),
-                                 range=20,
-                                 a_row=60, #1152-(128*test_N),
-                                 a_range=20
+                                 row=0, #1152-(128*test_N), #int(1152-(100*test_N)),
+                                 range=6,
+                                 a_row=0, #1152-(128*test_N),
+                                 a_range=6
                                  ))
                         time.sleep (10)
                         #if not header.wait == 0:
