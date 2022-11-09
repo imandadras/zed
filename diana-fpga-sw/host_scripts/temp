@@ -1,6 +1,6 @@
 source ~/env/bin/activate
 SCRIPT_NAME=run-diana-soc.py
-SCRIPT_ARGS='-p /root/results/0.74_-28_1/ --rx_packet_num 1'
+SCRIPT_ARGS='-p /root/results/ --rx_packet_num 1'
 cd diana-fpga-sw
 python3 -u $SCRIPT_NAME $SCRIPT_ARGS &> log2.txt
 #python3 $SCRIPT_NAME &> log2.txt

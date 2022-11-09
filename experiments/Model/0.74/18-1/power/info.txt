@@ -1,0 +1,2 @@
+Voltages are set at 2022-11-08 11:04:38.654616
+The measurement is forcefully closed at 2022-11-08 11:04:55.307104 without measurement

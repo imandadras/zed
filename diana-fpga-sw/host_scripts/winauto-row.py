@@ -14,8 +14,8 @@ from pathlib import Path
 
 
 #set the variables here
-csbias_steps = [0.74, 0.73, 0.72, 0.71]
-activations = list(range(-28,64,1)) #-63,63
+csbias_steps = [0.74]
+activations = [62] #-63,63
 weight_polarity = [1] #-1, 1
 N_tests = 1
 

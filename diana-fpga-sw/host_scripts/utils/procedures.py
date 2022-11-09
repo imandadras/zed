@@ -97,9 +97,9 @@ def spawn_openocd_p(verbose = False):
         time.sleep(3)
     if(attempts == max_attempts):
         print("Can't establish a stable JTAG connection. Exiting...")
-        raise IOError
+        return False
     print("Stable JTAG connections established after {} attempts...".format(attempts+1))
-    return openocd_p
+    return True
 
 #gdb_session_p
 def spawn_gdb_p(parser):
@@ -117,7 +117,6 @@ def off_procedure(session,  ctrlc=False, **kwargs):
     cmd ("ssh zedb-diana killall python3")
     #cmd ("ssh zedb-diana rm char* -rf")
     print ("process is killed")
-    cmd("ssh zedb-diana 'rm -rf ~/diana-fpga-sw/CHAR_DONE'")
     cmd("ssh zedb-diana 'rm -rf ~/diana-fpga-sw/TURNVDDEON'")
     if session:
         session[0].force_terminate()
