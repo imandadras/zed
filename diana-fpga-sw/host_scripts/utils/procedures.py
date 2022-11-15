@@ -111,15 +111,16 @@ def spawn_gdb_p(parser):
     return gdb_session_p
 
 #off_procedure
-def off_procedure(session,  ctrlc=False, **kwargs):
+def off_procedure(CHECK ,  ctrlc=False, **kwargs):
     print("Executing off procedure...")
     print("Please DO NOT press ctrl+C before explicitly required!")
     cmd ("ssh zedb-diana killall python3")
     #cmd ("ssh zedb-diana rm char* -rf")
     print ("process is killed")
-    cmd("ssh zedb-diana 'rm -rf ~/diana-fpga-sw/TURNVDDEON'")
-    if session:
-        session[0].force_terminate()
+    if CHECK[1]:
+        cmd("ssh zedb-diana 'rm -rf ~/diana-fpga-sw/TURNVDDEON'")
+    if CHECK[0]:
+        CHECK[0].force_terminate()
     cmd ("openocd -c shutdown")
     #SIGINT to all the
     cmd ("taskkill /IM ssh.exe /f")

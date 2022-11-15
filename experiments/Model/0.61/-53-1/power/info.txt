@@ -1,0 +1,11 @@
+Voltages are set at 2022-11-10 06:46:06.490786
+Channel plus is activated at 2022-11-10 06:46:21.749914
+Channel minus is activated at 2022-11-10 06:46:21.754963
+Channel vddio is activated at 2022-11-10 06:46:21.759979
+Channel vdd is activated at 2022-11-10 06:46:21.764972
+Channel vddmem is activated at 2022-11-10 06:46:21.769966
+Channel vh is activated at 2022-11-10 06:46:42.498737
+Channel vdde is activated at 2022-11-10 06:46:42.504731
+Channel csbias is activated at 2022-11-10 06:46:42.511732
+Measurement time = 2022-11-10 06:46:42.511732
+Termination time= 2022-11-10 06:46:54.886841

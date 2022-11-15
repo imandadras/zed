@@ -41,4 +41,5 @@ plt.title("Rows 0 to 19 with different activation and unit time values and weigh
 plt.legend()
 plt.grid(True)
 plt.show()
+print((experiments[9][-1]-experiments[9][0])/len(experiments[9]))
 

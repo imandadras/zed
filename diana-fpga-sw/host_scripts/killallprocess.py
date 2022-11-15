@@ -5,4 +5,4 @@ from    utils.parser import HostScriptParserClass
 
 session = power.power()
 
-off_procedure ([session])
+off_procedure (CHECK=[session,True])

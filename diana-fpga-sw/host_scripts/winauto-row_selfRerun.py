@@ -15,13 +15,13 @@ import os
 
 #set the variables here
 weight_form= "CLM"
-csbias_steps = [x/100 for x in list(range(71, 59, -1))]
-activation = 61  #-63,63
+csbias_steps = [Vc/100 for Vc in list(range(59,50,-1))]
+activation = 50  #-63,63
 weight_polarity = [1] #-1, 1
 N_tests = 1
 
-sess = []
-atexit.register(procedures.off_procedure, session=sess)
+CHECK = [False, False]
+atexit.register(procedures.off_procedure, CHECK=CHECK)
 print ("Making the parent directory for experiment results")
 first_time = True
 
@@ -41,9 +41,10 @@ for test_N in range(0, N_tests):
         while activation < 64:
             for weight_p in weight_polarity:
                 for row in range(1):
-                    results_path = "C:/results/{}/model/{}/{}-{}/".format(weight_form, cs_b,activation,weight_p) 
+                    CHECK=[False,False]
+                    results_path = "C:/results/{}/Model_40_last_rows/1/{}/{}/".format(weight_form, cs_b,activation) 
                     session = power.power (ana_csbias=cs_b,measurementFolder=results_path+'/power')
-                    sess=[session]
+                    CHECK[0]=session
                     session.power_set()
                     if test_N==12:
                         test_N=11.52
@@ -72,10 +73,10 @@ for test_N in range(0, N_tests):
                                  activation_size=4*4*128,
                                  activation_value=activation,
                                  weight_polarity=weight_p,
-                                 row=0, #1152-(128*test_N), #int(1152-(100*test_N)),
-                                 range=6,
-                                 a_row=0, #1152-(128*test_N),
-                                 a_range=6
+                                 row=1152-(10), #int(1152-(100*test_N)),
+                                 range=10,
+                                 a_row=1152-(10),
+                                 a_range=10
                                  ))
                         time.sleep (10)
                         #if not header.wait == 0:
@@ -102,7 +103,7 @@ for test_N in range(0, N_tests):
                 openocd_check = procedures.spawn_openocd_p()
                 if openocd_check == False:
                     print ("openocd check is false")
-                    procedures.off_procedure(session=[]) 
+                    procedures.off_procedure(CHECK=CHECK) 
                     break
                 #a = input ("run gdb")
                 time.sleep(2)
@@ -125,9 +126,10 @@ for test_N in range(0, N_tests):
                         break
                     time.sleep(1)
                 if TURNVDDON_check == False:
-                    procedures.off_procedure(session=[]) 
+                    procedures.off_procedure(CHECK=CHECK) 
                     break
                 print ("flag is there")
+                CHECK[1] = True
                 print ("starting analog supplies")
                 session.channel_active(settings.chdic['vh'])
                 session.channel_active(settings.chdic['vdde'])
@@ -136,6 +138,7 @@ for test_N in range(0, N_tests):
                 time.sleep(1)
                 print("Release FPGA core. Sending acknoledge signal...")
                 cmd("wsl ssh zedb-diana 'rm -f ~/diana-fpga-sw/TURNVDDEON'" , shell=True)
+                CHECK[1] =False
                 DONE_C=0
                 DONE_check = True
                 with cd (results_path):
@@ -147,13 +150,14 @@ for test_N in range(0, N_tests):
                             break       
                         time.sleep(1)
                 if DONE_check == False:
-                    procedures.off_procedure(session=[]) 
+                    procedures.off_procedure(CHECK=CHECK) 
                     break     
                 print ("flag is there")
                 cmd ("wsl ssh zedb-diana ' touch /root/diana-fpga-sw/SHUT'")
                 time.sleep(2)
                 session.terminate()
+                CHECK[0] = False
                 print ("running offprocedure")
                 activation +=1
-                procedures.off_procedure(session=[]) 
+                procedures.off_procedure(CHECK=CHECK) 
 atexit.unregister(procedures.off_procedure)

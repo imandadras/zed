@@ -3,7 +3,7 @@ import csv
 import matplotlib.pyplot as plt
 
 
-unit_time = 1
+unit_time = 0
 experiments = []
 paths = next(os.walk('.'))[1]
 for path in paths:
