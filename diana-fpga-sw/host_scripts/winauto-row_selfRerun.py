@@ -15,11 +15,11 @@ import os
 
 #set the variables here
 weight_form= "CLM"
-csbias_steps = [Vc/100 for Vc in list(range(59,50,-1))]
-activation = 50  #-63,63
+csbias_steps = [0.65]
+activation = 5  #-63,63
 weight_polarity = [1] #-1, 1
 N_tests = 1
-
+row = 1
 CHECK = [False, False]
 atexit.register(procedures.off_procedure, CHECK=CHECK)
 print ("Making the parent directory for experiment results")
@@ -35,14 +35,10 @@ for l in make_directory.stdout:
 
 for test_N in range(0, N_tests):
     for cs_b in csbias_steps:
-        if first_time == False:
-            activation = -62
-        first_time = False
-        while activation < 64:
+        while row < 15:
             for weight_p in weight_polarity:
-                for row in range(1):
                     CHECK=[False,False]
-                    results_path = "C:/results/{}/Model_40_last_rows/1/{}/{}/".format(weight_form, cs_b,activation) 
+                    results_path = "C:/results/{}/IR_drop/{}/{}/{}/".format(weight_form, cs_b,activation,row*10) 
                     session = power.power (ana_csbias=cs_b,measurementFolder=results_path+'/power')
                     CHECK[0]=session
                     session.power_set()
@@ -73,10 +69,10 @@ for test_N in range(0, N_tests):
                                  activation_size=4*4*128,
                                  activation_value=activation,
                                  weight_polarity=weight_p,
-                                 row=1152-(10), #int(1152-(100*test_N)),
-                                 range=10,
-                                 a_row=1152-(10),
-                                 a_range=10
+                                 row=1152-(10*row), #int(1152-(100*test_N)),
+                                 range=10*row,
+                                 a_row=1152-(10*row),
+                                 a_range=10*row
                                  ))
                         time.sleep (10)
                         #if not header.wait == 0:
@@ -84,80 +80,80 @@ for test_N in range(0, N_tests):
                         for l in make_directory.stdout:
                             print (l)
                             #exit()
-                    print ("compiling c code ...")
-                    procedures.c_compile()
-                    print ("running the experiment on chip ...")
-                    #power MB on
-                    session.channel_active(settings.chdic['plus'])
-                    session.channel_active(settings.chdic['minus'])
-                    session.channel_active(settings.chdic['vddio'])
-                    session.channel_active(settings.chdic['vdd'])
-                    session.channel_active(settings.chdic['vddmem'])
-                    print("Starting the FPGA program...")
-                    dump_path = "/root/results/"
+                        print ("compiling c code ...")
+                        procedures.c_compile()
+                        print ("running the experiment on chip ...")
+                        #power MB on
+                        session.channel_active(settings.chdic['plus'])
+                        session.channel_active(settings.chdic['minus'])
+                        session.channel_active(settings.chdic['vddio'])
+                        session.channel_active(settings.chdic['vdd'])
+                        session.channel_active(settings.chdic['vddmem'])
+                        print("Starting the FPGA program...")
+                        dump_path = "/root/results/"
                     #p = cmd ("ssh zedb-diana mkdir {}".format(dump_path))
-                #_ = input ("run fpga program")
-                procedures.spawn_zedb_p(dump_path=dump_path)
-                time.sleep(5)
-                print("Starting the chip program...")
-                openocd_check = procedures.spawn_openocd_p()
-                if openocd_check == False:
-                    print ("openocd check is false")
-                    procedures.off_procedure(CHECK=CHECK) 
-                    break
-                #a = input ("run gdb")
-                time.sleep(2)
-                #non_blocking_cmd ("riscv64-unknown-elf-gdb.exe Z:/home/imandadras/diana-riscv-src/ana_boot_ex/build/hwme.c/pulpissimo/hwme/hwme -x C:/zedboard/diana-fpga-sw/host_scripts/templates/gdb-run-soc.sh")
-                Path(results_path).mkdir(parents=True, exist_ok=True)
-                with cd (results_path):
-                    non_blocking_cmd ("riscv64-unknown-elf-gdb.exe C:/zedboard/diana-riscv-src/ana_boot_ex/build/hwme.c/pulpissimo/hwme/hwme -x C:/zedboard/diana-fpga-sw/host_scripts/templates/gdb-run-soc1.sh")
-                time.sleep (2)
-                print("Waiting for FPGA core to be sync...")
-                time.sleep(1)
-                
-                TURNVDDON_C = 0
-                TURNVDDON_check = True 
-                while cmd("wsl ssh zedb-diana 'test -f ~/diana-fpga-sw/TURNVDDEON'", verbose=True, shell=True):
-                    
-                    print ("flag is not there")
-                    TURNVDDON_C += 1
-                    if TURNVDDON_C == 4 :
-                        TURNVDDON_check = False
+                    #_ = input ("run fpga program")
+                    procedures.spawn_zedb_p(dump_path=dump_path)
+                    time.sleep(5)
+                    print("Starting the chip program...")
+                    openocd_check = procedures.spawn_openocd_p()
+                    if openocd_check == False:
+                        print ("openocd check is false")
+                        procedures.off_procedure(CHECK=CHECK) 
                         break
+                    #a = input ("run gdb")
+                    time.sleep(2)
+                    #non_blocking_cmd ("riscv64-unknown-elf-gdb.exe Z:/home/imandadras/diana-riscv-src/ana_boot_ex/build/hwme.c/pulpissimo/hwme/hwme -x C:/zedboard/diana-fpga-sw/host_scripts/templates/gdb-run-soc.sh")
+                    Path(results_path).mkdir(parents=True, exist_ok=True)
+                    with cd (results_path):
+                        non_blocking_cmd ("riscv64-unknown-elf-gdb.exe C:/zedboard/diana-riscv-src/ana_boot_ex/build/hwme.c/pulpissimo/hwme/hwme -x C:/zedboard/diana-fpga-sw/host_scripts/templates/gdb-run-soc1.sh")
+                    time.sleep (2)
+                    print("Waiting for FPGA core to be sync...")
                     time.sleep(1)
-                if TURNVDDON_check == False:
-                    procedures.off_procedure(CHECK=CHECK) 
-                    break
-                print ("flag is there")
-                CHECK[1] = True
-                print ("starting analog supplies")
-                session.channel_active(settings.chdic['vh'])
-                session.channel_active(settings.chdic['vdde'])
-                session.channel_active(settings.chdic['csbias'])
-                session.initiate()
-                time.sleep(1)
-                print("Release FPGA core. Sending acknoledge signal...")
-                cmd("wsl ssh zedb-diana 'rm -f ~/diana-fpga-sw/TURNVDDEON'" , shell=True)
-                CHECK[1] =False
-                DONE_C=0
-                DONE_check = True
-                with cd (results_path):
-                    while not exists("Done.txt"):
-                        print ("waiting for the chip program to be completed")
-                        DONE_C += 1
-                        if DONE_C == 15:
-                            DONE_check = False 
-                            break       
+
+                    TURNVDDON_C = 0
+                    TURNVDDON_check = True 
+                    while cmd("wsl ssh zedb-diana 'test -f ~/diana-fpga-sw/TURNVDDEON'", verbose=True, shell=True):
+
+                        print ("flag is not there")
+                        TURNVDDON_C += 1
+                        if TURNVDDON_C == 4 :
+                            TURNVDDON_check = False
+                            break
                         time.sleep(1)
-                if DONE_check == False:
+                    if TURNVDDON_check == False:
+                        procedures.off_procedure(CHECK=CHECK) 
+                        break
+                    print ("flag is there")
+                    CHECK[1] = True
+                    print ("starting analog supplies")
+                    session.channel_active(settings.chdic['vh'])
+                    session.channel_active(settings.chdic['vdde'])
+                    session.channel_active(settings.chdic['csbias'])
+                    session.initiate()
+                    time.sleep(1)
+                    print("Release FPGA core. Sending acknoledge signal...")
+                    cmd("wsl ssh zedb-diana 'rm -f ~/diana-fpga-sw/TURNVDDEON'" , shell=True)
+                    CHECK[1] =False
+                    DONE_C=0
+                    DONE_check = True
+                    with cd (results_path):
+                        while not exists("Done.txt"):
+                            print ("waiting for the chip program to be completed")
+                            DONE_C += 1
+                            if DONE_C == 15:
+                                DONE_check = False 
+                                break       
+                            time.sleep(1)
+                    if DONE_check == False:
+                        procedures.off_procedure(CHECK=CHECK) 
+                        break     
+                    print ("flag is there")
+                    cmd ("wsl ssh zedb-diana ' touch /root/diana-fpga-sw/SHUT'")
+                    time.sleep(2)
+                    session.terminate()
+                    CHECK[0] = False
+                    print ("running offprocedure")
+                    row +=1
                     procedures.off_procedure(CHECK=CHECK) 
-                    break     
-                print ("flag is there")
-                cmd ("wsl ssh zedb-diana ' touch /root/diana-fpga-sw/SHUT'")
-                time.sleep(2)
-                session.terminate()
-                CHECK[0] = False
-                print ("running offprocedure")
-                activation +=1
-                procedures.off_procedure(CHECK=CHECK) 
 atexit.unregister(procedures.off_procedure)

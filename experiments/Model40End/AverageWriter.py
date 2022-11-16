@@ -2,8 +2,8 @@ import os
 import csv
 import json
 Vcs_out ={}
-rows_n=40
-Vcs = [V/100 for V in list(range(60,81))]
+rows_n=1
+Vcs = [V/100 for V in list(range(51,81))]
 UT = list(range(0,10))
 actvation = list(range(-62,64))
 for V in Vcs:
@@ -30,5 +30,5 @@ for V in Vcs:
             actvation_out[act] = normalized
         UT_out[Unit_time] = actvation_out
     Vcs_out[V] = UT_out
-with open('output_values.json', 'w') as model:
+with open('output_values_unnormal.json', 'w') as model:
     json.dump(Vcs_out, model)

@@ -1,14 +1,12 @@
 import matplotlib.pyplot as plt
 import json
-
-with open ("Output_values.json") as file:
+output= []
+with open ("Output_values_unnormal.json") as file:
     outputs = json.load(file, parse_float=None)
-V = []
-output = []
-for Vcs in outputs.keys():
-    
-        V.append(float(Vcs))
-        output.append(outputs[Vcs]["9"]["63"])
-print (V)
-plt.plot(V , output)
+for unit_time in range(0,10):
+    output = []
+    for act in range(-62,64):
+        output.append(outputs["0.65"][str(unit_time)][str(act)])
+    x = list(range(-62,64))
+    plt.plot(x , output)
 plt.show()
