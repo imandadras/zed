@@ -50,7 +50,7 @@ experiments = [[x/N_rows for x in experiment] for experiment in experiments]
 activations = []
 xticks= list(range(-62,64,1))
 for i, UT in enumerate(experiments):
-    plt.plot(normalizers[i], UT, label = 'Unit time is {}'.format(i))
+    plt.plot(UTs[i], list(range(-62,64,1)), label = 'Unit time is {}'.format(i))
     #plt.plot(xticks, normalizers[i], label = 'Unit time is {}'.format(i))
 
 plt.xlabel("Input Value")

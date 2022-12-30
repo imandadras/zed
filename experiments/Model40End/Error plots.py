@@ -55,7 +55,7 @@ for Vcs in range(51,81):
 
 plt.xlabel("Output")
 plt.ylabel("Error")
-plt.title("Error vd. Output for different values of Vcs and unit time")
+plt.title("Error vs. Output for different values of Vcs and unit time")
 plt.legend()
 plt.grid(True)
 plt.show()

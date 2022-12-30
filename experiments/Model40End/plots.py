@@ -3,10 +3,13 @@ import json
 output= []
 with open ("Output_values_unnormal.json") as file:
     outputs = json.load(file, parse_float=None)
-for unit_time in range(0,10):
-    output = []
-    for act in range(-62,64):
-        output.append(outputs["0.65"][str(unit_time)][str(act)])
-    x = list(range(-62,64))
-    plt.plot(x , output)
+output = []
+
+for Vcs in [x/100 for x in list(range(51,80))]:
+        output.append(outputs[str(Vcs)]["1"][str(40)])
+x = [x/100 for x in list(range(51,80))]
+plt.plot(x , output)
+plt.xlabel("Vcsb")
+plt.ylabel("output")
+plt.title("Output variation according to unit time index = 1")
 plt.show()

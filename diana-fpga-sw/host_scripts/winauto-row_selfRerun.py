@@ -16,10 +16,10 @@ import os
 #set the variables here
 weight_form= "CLM"
 csbias_steps = [0.65]
-activation = 5  #-63,63
+activation = 60  #-63,63
 weight_polarity = [1] #-1, 1
 N_tests = 1
-row = 1
+row = 110
 CHECK = [False, False]
 atexit.register(procedures.off_procedure, CHECK=CHECK)
 print ("Making the parent directory for experiment results")
@@ -35,10 +35,10 @@ for l in make_directory.stdout:
 
 for test_N in range(0, N_tests):
     for cs_b in csbias_steps:
-        while row < 15:
+        while row < 111:
             for weight_p in weight_polarity:
                     CHECK=[False,False]
-                    results_path = "C:/results/{}/IR_drop/{}/{}/{}/".format(weight_form, cs_b,activation,row*10) 
+                    results_path = "C:/results/{}/IR_drop/noWeights/{}/{}/{}/".format(weight_form, cs_b,activation,row*10) 
                     session = power.power (ana_csbias=cs_b,measurementFolder=results_path+'/power')
                     CHECK[0]=session
                     session.power_set()
@@ -70,7 +70,7 @@ for test_N in range(0, N_tests):
                                  activation_value=activation,
                                  weight_polarity=weight_p,
                                  row=1152-(10*row), #int(1152-(100*test_N)),
-                                 range=10*row,
+                                 range=0,
                                  a_row=1152-(10*row),
                                  a_range=10*row
                                  ))

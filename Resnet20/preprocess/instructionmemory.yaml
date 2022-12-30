@@ -1,0 +1,23 @@
+- INSTR0:
+    WEIGHT_INIT       : 1 
+    WGT_PAKET_S       : 2304
+    SIMD_INIT         : 0
+    OUT_START_ADDRESS : 4096  #32*32*64/16
+    IN_CHANNEL        : 16
+    OUT_CHANNEL       : 16
+    PADDING_DOWN      : 1 
+    PADDING_UP        : 1 
+    PADDING_RIGHT     : 1 
+    PADDING_LEFT      : 1 
+    IF_FMAP_X         : 32
+    IF_FMAP_Y         : 32
+    OF_FMAP_X         : 32
+    OF_FMAP_Y         : 32
+    KERNEL_X          : 3
+    KERNEL_Y          : 3
+#    UNIT_TIME         : 0x0
+    USE_BLK_COL       : 0x8000
+    BUF_OFFSET        : 9
+
+- INSTR4:
+    STOP              : 1
