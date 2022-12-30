@@ -16,21 +16,21 @@ from preprocess.data_class import InstructionMemory
 weights = True
 activation = True
 IMh = True
-
+layer = 4
 cs_b = 0.7
-results_path = "./results/secondLayer/{}".format(cs_b)
+results_path = "./results/Layers/{}Lnn{}".format(cs_b, layer)
 
 if weights :
-    weight = [inputs.weights("./preprocess/test.txt",bottom=True)[1]]
+    weight = [inputs.weights("./preprocess/test.txt",bottom=True)[layer]]
     weight = inputs.mirror_Y(weight)
     weight = inputs.flip_weights(weight)
     weight = inputs.map_weights(weight)
     weight = inputs.flatten_list(weight)
+    inputs.gen_hdata_file("C:/zedboard/Resnet20/C_program/data/weight_memory_cnn_ania.h", weight, 32, 1, "w_cnn_ania",endian="big")
 
 if activation :
-    activ = inputs.activations("./preprocess/test.txt")[1]
+    activ = inputs.activations("./preprocess/test.txt")[layer]
     inputs.gen_hdata_file("C:/zedboard/Resnet20/C_program/data/input_memory_ania.h", activ, 32, 8, "input_ania",endian="big")
-
 if IMh:
     ima = InstructionMemory(yaml_file="C:/zedboard/Resnet20/preprocess/instructionmemory.yaml", yaml_template="C:/zedboard/diana-sdk/diana_rf_metadata/ima_template.yaml")
     ima.print_hfile("C:/zedboard/Resnet20/C_program/data/instruction_memory_ania.h","im_ania")

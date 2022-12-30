@@ -36,11 +36,11 @@ for FM, input in enumerate(reshaped):
     k,c,x,y = input.shape
     print (k,c,x,y)
     for ki in range(k):
-        for yi in range(y):
-            for xi in range(x):
-                for ci in range(c):
+        for ci in range(c):
+            for yi in range(y):
+                for xi in range(x):
                     outputs[FM].append(input[ki][ci][yi][xi])
 
 with open ("outputsL2.csv", 'w') as file:
     writer = csv.writer(file, delimiter= ',', )
-    writer.writerow(outputs[0])
+    writer.writerow(outputs[1])

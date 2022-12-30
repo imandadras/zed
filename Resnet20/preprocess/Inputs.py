@@ -78,7 +78,6 @@ def weights(input_file, bottom = True):
     for i, layer in enumerate(Layers_n) :
         Layer= np.reshape(layer, weight_shapes[i])
         reshaped.append(Layer)
-
     outputs = []
     for wi, Weight in enumerate(reshaped):
         outputs.append([])
@@ -93,6 +92,7 @@ def weights(input_file, bottom = True):
                         outputs[wi][ki].append(0)
         for xdummies in range (512-k):
             outputs[wi].append((576*[0]))
+    print (np.sum(outputs[0][19]))
     if bottom:
         for io,output in enumerate(outputs):
             dummies = (1152-len(output[0]))*[0]
@@ -199,8 +199,8 @@ def flatten_list(l):
 
 #activ = activations("test.txt")[0]
 #gen_hdata_file("C:/zedboard/Resnet20/C_program/data/input_memory_ania.h", activ, 32, 8, "input_ania",endian="big")
-#
-#weight = [weights("test.txt")[0]]
+
+#weights("test.txt")[0]
 #weight = mirror_Y(weight)
 #weight = flip_weights(weight)
 #weight = map_weights(weight)

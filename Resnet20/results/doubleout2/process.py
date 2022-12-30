@@ -5,7 +5,7 @@ UTs=[]
 paths = next(os.walk('.'))[1]
 #activations_n=[float(path) for path in paths]
 for path in paths:
-    with open ('{}/9.csv'.format(path),) as file:
+    with open ('{}/1.csv'.format(path),) as file:
         results = csv.reader(file, delimiter='\t')
 
         res = [row for row in results]
@@ -27,12 +27,13 @@ zipped.sort(key=lambda tup: tup[0])
 UTs = [tup[1] for tup in zipped]
 activations_n = [tup[0] for tup in zipped]
 activations = []
-with open ("outputs.csv", 'r') as file:
+with open ("outputL0.csv", 'r') as file:
     reader = csv.reader(file, delimiter=",")
     output = list(reader)
 print (output)
-output = [int(out) for out in output[0]]
-plt.plot(UTs[1], label = 'activation is {}'.format(activations_n[1]))
+output = [float(out) for out in output[0]]
+for i, UT in enumerate(UTs):    
+    plt.plot(UT, label = 'activation is {}'.format(activations_n[i]))
 plt.plot(output, label = 'output', linewidth = 2)
 plt.xlabel("Column number")
 plt.ylabel("Readout value")
